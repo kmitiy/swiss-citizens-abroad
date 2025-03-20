@@ -6,6 +6,9 @@ authors = [
     {name = "kmitiy",email = "kai.mitiy@outlook.com"}
 ]
 readme = "README.md"
+packages = [
+    { include = "src/swiss-citizens-abroad" }
+]
 requires-python = ">=3.13"
 dependencies = [
 ]
