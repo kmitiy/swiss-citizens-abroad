@@ -53,7 +53,7 @@ print(df)
 
 # Database credentials
 db_username = 'kmitiy'
-db_password = 'W*anpZVXyn3r8kGYkVya'
+db_password = ''
 db_host = 'localhost'
 db_port = '5432'  # Default PostgreSQL port
 db_name = 'bundesamt_fuer_statistik'
