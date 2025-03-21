@@ -6,9 +6,17 @@ authors = [
     {name = "kmitiy",email = "kai.mitiy@outlook.com"}
 ]
 readme = "README.md"
-package-mode = false
 requires-python = ">=3.13"
 dependencies = [
+    "requests (>=2.32.3,<3.0.0)",
+    "pandas (>=2.2.3,<3.0.0)",
+    "numpy (>=2.2.4,<3.0.0)"
+]
+
+
+[tool.poetry]
+packages = [
+    { include = "src" }
 ]
 
 
