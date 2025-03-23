@@ -56,7 +56,7 @@ db_username = 'kmitiy'
 db_password = ''
 db_host = 'localhost'
 db_port = '5432'  # Default PostgreSQL port
-db_name = 'bundesamt_fuer_statistik'
+db_name = 'bfs'
 table_name = 'bfs_publications'
 
 # Create database connection
