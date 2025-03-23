@@ -2,7 +2,21 @@ import requests
 import pandas as pd
 import datetime
 from sqlalchemy import create_engine
+import random
 
+
+def generate_unique_id():
+    while True:
+        # Generate a random 6-digit number
+        load_id = str(random.randint(100000, 999999))
+
+        # Query to check if the ID already exists in the table
+        cursor.execute("SELECT COUNT(*) FROM bfs_publications WHERE your_column = %s", (load_id,))
+        count = cursor.fetchone()[0]
+
+        # If the ID doesn't exist, return it
+        if count == 0:
+            return load_id
 
 url = 'https://dam-api.bfs.admin.ch/hub/api/dam/agenda'
 
