@@ -1,6 +1,7 @@
-CREATE TABLE public.bfs_publications
+CREATE TABLE steering.bfs_publications
 (
-    record_id integer NOT NULL,
+    record_id INT GENERATED ALWAYS AS IDENTITY (START WITH 100000) PRIMARY KEY,
+    load_id integer NOT NULL,
     created_ts timestamp with time zone NOT NULL,
     uuid uuid NOT NULL,
     gnp text NOT NULL,
@@ -18,11 +19,10 @@ CREATE TABLE public.bfs_publications
     prodima_lvl_0_name text,
     prodima_lvl_1_name text,
     short_text_gnp text,
-    languages text,
-    PRIMARY KEY (record_id)
+    languages text
 );
 
-ALTER TABLE IF EXISTS public.bfs_publications
-    OWNER to postgres;
+ALTER TABLE IF EXISTS steering.bfs_publications
+    OWNER to kmitiy;
 
-GRANT ALL ON TABLE public.bfs_publications TO kmitiy;
+GRANT ALL ON TABLE steering.bfs_publications TO kmitiy;
