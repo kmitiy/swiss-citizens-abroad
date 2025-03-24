@@ -11,7 +11,7 @@ import os
 
 
 # Load the YAML logging configuration file
-config_file_path = os.path.join(os.path.dirname(__file__), '..', 'config', 'logging_config.yaml')
+config_file_path = os.path.abspath('../config/logging_config.yaml')
 with open(config_file_path, 'r') as f:
     config = yaml.safe_load(f)
 logging.config.dictConfig(config)
@@ -92,10 +92,10 @@ def generate_unique_id(i_engine: Engine, i_schema_name: str, i_table_name: str, 
 
         # Check if the count is 0
         if count == 0:
-            logger.info(f'Generated load ID {load_id} was not found in column {i_col_name.upper()} of target table {i_table_name.upper()} in schema {i_schema_name}. Therefore, it can be used')
+            logger.info(f'Generated load ID {load_id} was not found in column {i_col_name.upper()} of target table {i_table_name.upper()} in schema {i_schema_name.upper()}, so it can be used')
             return load_id
         else:
-            logger.info(f'Generated load ID {load_id} already exists in column {i_col_name.upper()} of target table {i_table_name.upper()} in schema {i_schema_name}. A different one will be generated')
+            logger.info(f'Generated load ID {load_id} already exists in column {i_col_name.upper()} of target table {i_table_name.upper()} in schema {i_schema_name.upper()}, so a different one will be generated')
 
 # Executed in "if __name__ == '__main__'" block
 def main():
@@ -115,7 +115,7 @@ def main():
     db_port = '5432'  # Default PostgreSQL port
     db_name = 'bfs'
     try:
-        logger.info(f'Trying to connect to the database:\nUsername -> {db_username}\nPassword -> [REDACTED]\nHost -> {db_host}\nPort -> {db_port}\nDB Name -> {db_name}')
+        logger.info(f'Trying to connect to the database:\nUsername -> "{db_username}"\nPassword -> [REDACTED]\nHost -> "{db_host}"\nPort -> "{db_port}"\nDB Name -> "{db_name}"')
         engine = create_engine(f'postgresql+psycopg2://{db_username}:{db_password}@{db_host}:{db_port}/{db_name}')
     except OperationalError as e:
         logger.error(f'OperationalError: Could not connect to the database. {str(e)}')
@@ -132,7 +132,7 @@ def main():
 
     # Write df to our BFS DB
     try:
-        df.to_sql(table_name, engine, schema_name, if_exists='append', index=False)
+        df.to_sql(table_name, engine, schema=schema_name, if_exists='append', index=False)
         logger.info(f'Successfully inserted {len(df.index)} records into table {table_name.upper()} of schema {schema_name.upper()}')
     except SQLAlchemyError as e:
         logger.error(f'SQLAlchemyError: An error occurred while inserting data into the table. {str(e)}')
