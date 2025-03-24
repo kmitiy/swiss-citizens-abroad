@@ -1,23 +1,25 @@
 import requests
 import pandas as pd
 import datetime
-from sqlalchemy import create_engine, text
+from sqlalchemy import create_engine, text, Engine
 import random
+from typing import Any, Dict, TypeAlias
 
 
-def fetch_data(i_url, i_headers):
+# Define custom type alias for JSON data to allow for proper type annotation
+JSON: TypeAlias = Dict[str, Any]
+
+def fetch_data(i_url: str, i_headers: Dict[str, str]) -> JSON:
     response = requests.get(i_url, headers=i_headers)
-
     if response.status_code != 200:
         print(f'Failed to fetch data. Status code: {response.status_code}')
-
     return response.json()
 
-def transform_data(i_src_json, i_load_id):
-
+def transform_data(i_src_json: JSON, i_load_id: int) -> pd.DataFrame:
     # Will be a list of dictionaries, the keys being the headers, the values being the row values
     transformed_data = []
-    for item in i_src_json['data']:
+    src_data = i_src_json['data']  # Store in a variable for clarity
+    for item in src_data:
         transformed_data.append({
             'load_id': i_load_id,
             'created_ts': datetime.datetime.now(),
@@ -39,16 +41,15 @@ def transform_data(i_src_json, i_load_id):
             'short_text_gnp': item['description']['shortTextGnp']['raw'],
             'languages': (','.join(item['description']['languages']))
         })
-
     return pd.DataFrame(transformed_data)
 
-def generate_unique_id(i_engine, i_schema, i_table_name, i_col_name):
+def generate_unique_id(i_engine: Engine, i_schema_name: str, i_table_name: str, i_col_name: str) -> int:
     while True:
         # Generate a random 6-digit number
-        load_id = str(random.randint(100000, 999999))
+        load_id = random.randint(100000, 999999)
 
         # Define your SELECT query to count rows
-        query = f'SELECT COUNT(*) FROM {i_schema}.{i_table_name} WHERE {i_col_name} = {load_id}'
+        query = f'SELECT COUNT(*) FROM {i_schema_name}.{i_table_name} WHERE {i_col_name} = {load_id}'
 
         # Establish connection and execute the query
         with i_engine.connect() as con:
