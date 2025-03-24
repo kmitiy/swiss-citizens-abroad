@@ -15,22 +15,25 @@ def fetch_data(i_url: str, i_headers: Dict[str, str]) -> JSON:
     try:
         response = requests.get(i_url, headers=i_headers)
         response.raise_for_status()  # Raises an HTTPError for 4xx/5xx responses
+        response_json = response.json()
+        if response_json == {}:
+            print('empty dictionary')
         return  response.json()
 
     except requests.exceptions.HTTPError as e:
         # Catch 4xx or 5xx status codes, but raise_for_status() already handles this.
         print(f'HTTP error occurred: {e}')
-        return {}
+        raise
 
     except requests.exceptions.RequestException as e:
         # Catch network-related issues, including timeouts, DNS issues, etc.
         print(f'Error during request: {e}')
-        return {}
+        raise
 
     except ValueError:
         # Handle the case where the response body is not valid JSON
         print('Error: Response is not valid JSON')
-        return {}
+        raise
 
 # Transform BFS publishing data into a usable df
 def transform_data(i_src_json: JSON, i_load_id: int) -> pd.DataFrame:
@@ -100,8 +103,10 @@ def main():
         engine = create_engine(f'postgresql+psycopg2://{db_username}:{db_password}@{db_host}:{db_port}/{db_name}')
     except OperationalError as e:
         print(f'OperationalError: Could not connect to the database. {str(e)}')
+        raise
     except Exception as e:
         print(f'Unexpected error: {str(e)}')
+        raise
 
     # Create unique load id and extract relevant source data into df
     schema_name = 'steering'
@@ -114,8 +119,10 @@ def main():
         df.to_sql(table_name, engine, schema_name, if_exists='append', index=False)
     except SQLAlchemyError as e:
         print(f'SQLAlchemyError: An error occurred while inserting data into the table. {str(e)}')
+        raise
     except Exception as e:
         print(f'Unexpected error: {str(e)}')
+        raise
 
     # Explicitly close the connection
     engine.dispose()
