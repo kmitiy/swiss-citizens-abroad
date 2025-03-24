@@ -2,6 +2,7 @@ import requests
 import pandas as pd
 import datetime
 from sqlalchemy import create_engine, text, Engine
+from sqlalchemy.exc import SQLAlchemyError, OperationalError
 import random
 from typing import Any, Dict, TypeAlias
 
@@ -11,10 +12,25 @@ JSON: TypeAlias = Dict[str, Any]
 
 # Fetch data via GET from a given API
 def fetch_data(i_url: str, i_headers: Dict[str, str]) -> JSON:
-    response = requests.get(i_url, headers=i_headers)
-    if response.status_code != 200:
-        print(f'Failed to fetch data. Status code: {response.status_code}')
-    return response.json()
+    try:
+        response = requests.get(i_url, headers=i_headers)
+        response.raise_for_status()  # Raises an HTTPError for 4xx/5xx responses
+        return  response.json()
+
+    except requests.exceptions.HTTPError as e:
+        # Catch 4xx or 5xx status codes, but raise_for_status() already handles this.
+        print(f'HTTP error occurred: {e}')
+        return {}
+
+    except requests.exceptions.RequestException as e:
+        # Catch network-related issues, including timeouts, DNS issues, etc.
+        print(f'Error during request: {e}')
+        return {}
+
+    except ValueError:
+        # Handle the case where the response body is not valid JSON
+        print('Error: Response is not valid JSON')
+        return {}
 
 # Transform BFS publishing data into a usable df
 def transform_data(i_src_json: JSON, i_load_id: int) -> pd.DataFrame:
@@ -80,7 +96,12 @@ def main():
     db_host = 'localhost'
     db_port = '5432'  # Default PostgreSQL port
     db_name = 'bfs'
-    engine = create_engine(f'postgresql+psycopg2://{db_username}:{db_password}@{db_host}:{db_port}/{db_name}')
+    try:
+        engine = create_engine(f'postgresql+psycopg2://{db_username}:{db_password}@{db_host}:{db_port}/{db_name}')
+    except OperationalError as e:
+        print(f'OperationalError: Could not connect to the database. {str(e)}')
+    except Exception as e:
+        print(f'Unexpected error: {str(e)}')
 
     # Create unique load id and extract relevant source data into df
     schema_name = 'steering'
@@ -89,10 +110,15 @@ def main():
     df = transform_data(src_data, load_id)
 
     # Write df to our BFS DB
-    df.to_sql(table_name, engine, schema_name, if_exists='append', index=False)
+    try:
+        df.to_sql(table_name, engine, schema_name, if_exists='append', index=False)
+    except SQLAlchemyError as e:
+        print(f'SQLAlchemyError: An error occurred while inserting data into the table. {str(e)}')
+    except Exception as e:
+        print(f'Unexpected error: {str(e)}')
 
     # Explicitly close the connection
     engine.dispose()
 
 if __name__ == '__main__':
-    main()
+   main()
