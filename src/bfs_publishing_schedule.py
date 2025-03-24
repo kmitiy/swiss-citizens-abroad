@@ -9,12 +9,14 @@ from typing import Any, Dict, TypeAlias
 # Define custom type alias for JSON data to allow for proper type annotation
 JSON: TypeAlias = Dict[str, Any]
 
+# Fetch data via GET from a given API
 def fetch_data(i_url: str, i_headers: Dict[str, str]) -> JSON:
     response = requests.get(i_url, headers=i_headers)
     if response.status_code != 200:
         print(f'Failed to fetch data. Status code: {response.status_code}')
     return response.json()
 
+# Transform BFS publishing data into a usable df
 def transform_data(i_src_json: JSON, i_load_id: int) -> pd.DataFrame:
     # Will be a list of dictionaries, the keys being the headers, the values being the row values
     transformed_data = []
@@ -43,6 +45,7 @@ def transform_data(i_src_json: JSON, i_load_id: int) -> pd.DataFrame:
         })
     return pd.DataFrame(transformed_data)
 
+# Generate a six digit long ID for each load. Make sure that it is not already assigned in the target table
 def generate_unique_id(i_engine: Engine, i_schema_name: str, i_table_name: str, i_col_name: str) -> int:
     while True:
         # Generate a random 6-digit number
@@ -60,8 +63,7 @@ def generate_unique_id(i_engine: Engine, i_schema_name: str, i_table_name: str, 
         if count == 0:
             return load_id
 
-
-
+# Executed in "if __name__ == '__main__'" block
 def main():
 
     # Fetch source data from the BFS API
