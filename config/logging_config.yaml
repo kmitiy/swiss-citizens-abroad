@@ -6,8 +6,12 @@ formatters:
     format: '%(asctime)s - %(levelname)s - %(message)s'
     datefmt: '%Y-%m-%d %H:%M:%S'
   detailed:
-    format: '%(asctime)s - %(name)s - %(levelname)s - %(message)s - [%(filename)s:%(lineno)d]'
+    format: '[RUN-%(run_id)s] %(asctime)s - %(name)s - %(levelname)s - %(message)s - [%(filename)s:%(lineno)d]'
     datefmt: '%Y-%m-%d %H:%M:%S'
+
+filters:
+  add_run_id:
+    "()": AddRunIDFilter  # Ensure filter is properly added
 
 handlers:
   console:
@@ -24,6 +28,8 @@ handlers:
     maxBytes: 1048576  # 1MB (1,048,576 bytes)
     backupCount: 3  # Keep up to 3 old log files
     encoding: utf8
+    filters: [add_run_id]  # Apply the filter here
+
 
 loggers:
   root:

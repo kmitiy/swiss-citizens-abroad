@@ -8,13 +8,40 @@ from typing import Any, Dict, TypeAlias
 import logging.config
 import yaml
 import os
+import uuid
 
+
+# Generate a unique log run ID (shortened for readability)
+run_id = uuid.uuid4().hex[:8]
+
+# Define the custom filter class
+class AddRunIDFilter(logging.Filter):
+    def filter(self, record):
+        record.run_id = run_id  # Inject the run_id into every log record
+        return True
+
+
+
+
+# Log file name
+log_file = '../logs/app.log'
+
+# Add a separator line at the start of each run
+separator = f'\n{"="*60}\nNew Run: {datetime.datetime.now()} | Run ID: {run_id}\n{"="*60}\n'
+with open(log_file, 'a', encoding='utf-8') as f:
+    f.write(separator)
 
 # Load the YAML logging configuration file
 config_file_path = os.path.abspath('../config/logging_config.yaml')
 with open(config_file_path, 'r') as f:
     config = yaml.safe_load(f)
+
+# Register the filter class in the config (needed for YAML reference)
+config["filters"]["add_run_id"]["()"] = AddRunIDFilter
+
+# Apply logging configuration
 logging.config.dictConfig(config)
+
 logger = logging.getLogger(__name__)
 
 # Define custom type alias for JSON data to allow for proper type annotation
@@ -146,4 +173,6 @@ def main():
     logger.info(f'Connection to {engine.url.database.upper()} is closed')
 
 if __name__ == '__main__':
-   main()
+    logger.info('Started execution of main block')
+    main()
+    logger.info('Finished execution of main block')
