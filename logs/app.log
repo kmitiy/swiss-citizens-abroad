@@ -12,3 +12,31 @@ DB Name -> "bfs" - [bfs_publishing_schedule.py:118]
 2025-03-24 16:31:15 - __main__ - INFO - Generated load ID 927771 was not found in column LOAD_ID of target table BFS_PUBLICATIONS in schema STEERING, so it can be used - [bfs_publishing_schedule.py:95]
 2025-03-24 16:31:15 - __main__ - INFO - Successfully inserted 20 records into table BFS_PUBLICATIONS of schema STEERING - [bfs_publishing_schedule.py:136]
 2025-03-24 16:31:15 - __main__ - INFO - Connection to BFS is closed - [bfs_publishing_schedule.py:146]
+2025-03-24 16:43:55 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): dam-api.bfs.admin.ch:443 - [connectionpool.py:1049]
+2025-03-24 16:43:55 - urllib3.connectionpool - DEBUG - https://dam-api.bfs.admin.ch:443 "GET /hub/api/dam/agenda HTTP/1.1" 200 56014 - [connectionpool.py:544]
+2025-03-24 16:43:55 - __main__ - INFO - Successfully fetched source data from BFS API - [bfs_publishing_schedule.py:28]
+2025-03-24 16:43:55 - __main__ - INFO - Trying to connect to the database:
+Username -> "kmitiy"
+Password -> [REDACTED]
+Host -> "localhost"
+Port -> "5432"
+DB Name -> "bfs" - [bfs_publishing_schedule.py:118]
+2025-03-24 16:43:55 - __main__ - INFO - Load ID 980225 was generated for this data load - [bfs_publishing_schedule.py:82]
+2025-03-24 16:43:55 - __main__ - INFO - Executing query: "SELECT COUNT(*) FROM steering.bfs_publications WHERE load_id = 980225" - [bfs_publishing_schedule.py:90]
+2025-03-24 16:43:55 - __main__ - INFO - Generated load ID 980225 was not found in column LOAD_ID of target table BFS_PUBLICATIONS in schema STEERING, so it can be used - [bfs_publishing_schedule.py:95]
+2025-03-24 16:43:55 - __main__ - INFO - Successfully inserted 20 records into table BFS_PUBLICATIONS of schema STEERING - [bfs_publishing_schedule.py:136]
+2025-03-24 16:43:55 - __main__ - INFO - Connection to BFS is closed - [bfs_publishing_schedule.py:146]
+2025-03-24 16:44:04 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): dam-api.bfs.admin.ch:443 - [connectionpool.py:1049]
+2025-03-24 16:44:04 - urllib3.connectionpool - DEBUG - https://dam-api.bfs.admin.ch:443 "GET /hub/api/dam/agenda HTTP/1.1" 200 56014 - [connectionpool.py:544]
+2025-03-24 16:44:04 - __main__ - INFO - Successfully fetched source data from BFS API - [bfs_publishing_schedule.py:28]
+2025-03-24 16:44:04 - __main__ - INFO - Trying to connect to the database:
+Username -> "kmitiy"
+Password -> [REDACTED]
+Host -> "localhost"
+Port -> "5432"
+DB Name -> "bfs" - [bfs_publishing_schedule.py:118]
+2025-03-24 16:44:04 - __main__ - INFO - Load ID 101000 was generated for this data load - [bfs_publishing_schedule.py:82]
+2025-03-24 16:44:04 - __main__ - INFO - Executing query: "SELECT COUNT(*) FROM steering.bfs_publications WHERE load_id = 101000" - [bfs_publishing_schedule.py:90]
+2025-03-24 16:44:04 - __main__ - INFO - Generated load ID 101000 was not found in column LOAD_ID of target table BFS_PUBLICATIONS in schema STEERING, so it can be used - [bfs_publishing_schedule.py:95]
+2025-03-24 16:44:04 - __main__ - INFO - Successfully inserted 20 records into table BFS_PUBLICATIONS of schema STEERING - [bfs_publishing_schedule.py:136]
+2025-03-24 16:44:04 - __main__ - INFO - Connection to BFS is closed - [bfs_publishing_schedule.py:146]
