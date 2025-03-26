@@ -4,12 +4,10 @@ import datetime
 from sqlalchemy import create_engine, text, Engine
 from sqlalchemy.exc import SQLAlchemyError, OperationalError
 import random
-from typing import Any, Dict, TypeAlias
+from typing import Dict
 from logs.logging_setup import logger
+from custom_type_annotations import JSON
 
-
-# Define custom type alias for JSON data to allow for proper type annotation
-JSON: TypeAlias = Dict[str, Any]
 
 # Fetch data via GET from a given API
 def fetch_data(i_url: str, i_headers: Dict[str, str]) -> JSON:

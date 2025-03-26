@@ -1,0 +1,20 @@
+
+============================================================
+New Run: 2025-03-26 21:36:49.667975 | Run ID: eb283759
+============================================================
+[RUN-eb283759] 2025-03-26 21:36:49 - logs.logging_setup - INFO - Started execution of main block - [bfs_publishing_schedule.py:138]
+[RUN-eb283759] 2025-03-26 21:36:49 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): dam-api.bfs.admin.ch:443 - [connectionpool.py:1049]
+[RUN-eb283759] 2025-03-26 21:36:49 - urllib3.connectionpool - DEBUG - https://dam-api.bfs.admin.ch:443 "GET /hub/api/dam/agenda HTTP/1.1" 200 57831 - [connectionpool.py:544]
+[RUN-eb283759] 2025-03-26 21:36:49 - logs.logging_setup - INFO - Successfully fetched source data from BFS API - [bfs_publishing_schedule.py:17]
+[RUN-eb283759] 2025-03-26 21:36:49 - logs.logging_setup - INFO - Trying to connect to the database:
+Username -> "kmitiy"
+Password -> [REDACTED]
+Host -> "localhost"
+Port -> "5432"
+DB Name -> "bfs" - [bfs_publishing_schedule.py:107]
+[RUN-eb283759] 2025-03-26 21:36:49 - logs.logging_setup - INFO - Load ID 602025 was generated for this data load - [bfs_publishing_schedule.py:71]
+[RUN-eb283759] 2025-03-26 21:36:49 - logs.logging_setup - INFO - Executing query: "SELECT COUNT(*) FROM steering.bfs_publications WHERE load_id = 602025" - [bfs_publishing_schedule.py:79]
+[RUN-eb283759] 2025-03-26 21:36:49 - logs.logging_setup - INFO - Generated load ID 602025 was not found in column LOAD_ID of target table BFS_PUBLICATIONS in schema STEERING, so it can be used - [bfs_publishing_schedule.py:84]
+[RUN-eb283759] 2025-03-26 21:36:49 - logs.logging_setup - INFO - Successfully inserted 20 records into table BFS_PUBLICATIONS of schema STEERING - [bfs_publishing_schedule.py:125]
+[RUN-eb283759] 2025-03-26 21:36:49 - logs.logging_setup - INFO - Connection to BFS is closed - [bfs_publishing_schedule.py:135]
+[RUN-eb283759] 2025-03-26 21:36:49 - logs.logging_setup - INFO - Finished execution of main block - [bfs_publishing_schedule.py:140]
